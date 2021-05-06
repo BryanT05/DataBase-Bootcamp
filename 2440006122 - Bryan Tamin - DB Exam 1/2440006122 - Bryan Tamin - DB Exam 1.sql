@@ -1,0 +1,72 @@
+CREATE DATABASE DBExam
+
+use DBExam
+
+CREATE TABLE Users(
+	ID char(10) PRIMARY KEY,
+	FirstName varchar(255),
+	LastName varchar(255),
+	School varchar(255),
+	Adress varchar(255),
+	Email varchar(255),
+	PhoneNumber varchar(15),
+	Location varchar(255),
+	DateOfBirth date,
+	Gender varchar(15)
+)
+
+CREATE TABLE Posts(
+	ID char(10) PRIMARY KEY,
+	UsersID char(10) FOREIGN KEY REFERENCES Users(ID),
+	Content varchar(255),
+	Date date
+)
+
+CREATE TABLE Friends(
+	ID char(10) PRIMARY KEY,
+	UsersID char(10) FOREIGN KEY REFERENCES Users(ID)
+)
+
+CREATE TABLE Pages(
+	ID char(10) PRIMARY KEY,
+	Name varchar(255),
+	Content varchar(255)
+)
+
+CREATE TABLE PageLikes(
+	UsersID char(10) FOREIGN KEY REFERENCES Users(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+	PageID char(10) FOREIGN KEY REFERENCES Pages(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+	PRIMARY KEY(UsersID,PageID)
+)
+
+CREATE TABLE PostLikes(
+	UsersID char(10) FOREIGN KEY REFERENCES Users(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+	PostsID char(10) FOREIGN KEY REFERENCES Posts(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+	PRIMARY KEY(UsersID,PostsID)
+)
+
+CREATE TABLE Photos(
+	ID char(10) PRIMARY KEY,
+	PostsID char(10) FOREIGN KEY REFERENCES Posts(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+	ImageContent varbinary(max)
+)
+
+CREATE TABLE Shares(
+	UsersID char(10) FOREIGN KEY REFERENCES Users(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+	PostsID char(10) FOREIGN KEY REFERENCES Posts(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+	PRIMARY KEY(UsersID,PostsID)
+)
+
+CREATE TABLE Comments(
+	ID char(10) PRIMARY KEY,
+	UsersID char(10) FOREIGN KEY REFERENCES Users(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+	PostsID char(10) FOREIGN KEY REFERENCES Posts(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+	Date date,
+	Content varchar(255)
+)
+
+CREATE TABLE CommentLikes(
+	CommentsID char(10) FOREIGN KEY REFERENCES Comments(ID),
+	UsersID char(10) FOREIGN KEY REFERENCES Users(ID),
+	PRIMARY KEY(UsersID,CommentsID)
+)
